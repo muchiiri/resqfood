@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ResQfood - Desktop</title><link rel="stylesheet" href="theme.css">
+<style>
+  body { height: 100vh; display: grid; grid-template: 64px 1fr 64px / 280px 1fr 340px; gap: var(--space-3); padding: var(--space-3); overflow: hidden; }
+  .top { grid-column: 1 / -1; display: flex; align-items: center; gap: var(--space-4); }
+  .top .search { flex: 1; max-width: 520px; margin: 0 auto; }
+  .panel { background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow); padding: var(--space-4); overflow-y: auto; }
+  .nav a { display: flex; gap: var(--space-3); padding: 10px 6px; font-weight: 700; color: var(--muted); }
+  .nav a.on { color: var(--primary); }
+  .nav .btn { margin: var(--space-3) 0; }
+  .lib { margin-top: var(--space-3); border-top: 1px solid var(--border); padding-top: var(--space-3); }
+  .lib .chips { display: flex; gap: 6px; flex-wrap: wrap; margin: var(--space-3) 0; }
+  .lib .chip { padding: 5px 10px; font-size: 12px; }
+  .li { display: flex; align-items: center; gap: var(--space-3); padding: 8px 0; font-size: 14px; font-weight: 600; }
+  .li .e { width: 36px; height: 36px; border-radius: 8px; display: grid; place-items: center; background: var(--secondary-tint); }
+  .main { background: transparent; box-shadow: none; padding: var(--space-2); }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: var(--space-4); }
+  .grid .card.sel { outline: 3px solid var(--primary); }
+  .detail .photo { height: 180px; font-size: 80px; border-radius: var(--radius); }
+  .pbar { grid-column: 1 / -1; background: var(--primary); color: var(--primary-ink); border-radius: var(--radius); display: flex; align-items: center; gap: var(--space-4); padding: 0 var(--space-5); }
+  .pbar .count { margin-left: auto; font-weight: 800; color: var(--accent-2); }
+</style></head><body>
+<header class="top">
+  <img src="logo.jpg" alt="ResQfood" height="48" style="border-radius:10px">
+  <div class="search"><i data-lucide="search"></i> Search food, bakeries, campus dining…</div>
+  <span class="bell"><i data-lucide="bell"></i></span><div class="avatar">S</div>
+</header>
+
+<aside class="panel">
+  <nav class="nav">
+    <a class="on"><i data-lucide="house"></i> Home</a><a><i data-lucide="search"></i> Find Food</a>
+    <button class="btn btn-ico"><i data-lucide="circle-plus"></i> Create</button>
+  </nav>
+  <div class="lib"><b class="lib-title"><i data-lucide="carrot"></i> My Food</b>
+    <div class="chips"><span class="chip on">All</span><span class="chip">Expiring</span><span class="chip">Listings</span><span class="chip">Claims</span></div>
+    <div class="li"><span class="e" style="background:var(--today-tint)">🥛</span>Fresh milk <span class="badge today" style="margin-left:auto">Today</span></div>
+    <div class="li"><span class="e" style="background:var(--expiring-tint)">🥬</span>Spinach bag <span class="badge expiring" style="margin-left:auto">2 days</span></div>
+    <div class="li"><span class="e">🍞</span>Wheat bread <span class="badge fresh" style="margin-left:auto">6 days</span></div>
+    <div class="li"><span class="e">🥙</span>My claim: shawarma</div>
+  </div>
+</aside>
+
+<main class="panel main">
+  <div class="title">Good evening, Shaikha</div>
+  <div class="section"><h2>Near you</h2>
+    <div class="grid">
+      <div class="card sel"><div class="photo orange">🥙</div><div class="body"><h3>Chicken shawarma x4</h3><p>Al Noor Grill · 0.4 km</p></div></div>
+      <div class="card"><div class="photo amber">🥐</div><div class="body"><h3>Bakery box, mixed</h3><p>Baker's Corner · 0.9 km</p></div></div>
+      <div class="card"><div class="photo green">🥗</div><div class="body"><h3>Fresh salad bowls</h3><p>Campus Dining · 1.2 km</p></div></div>
+      <div class="card"><div class="photo leaf">🍚</div><div class="body"><h3>Biryani, family tray</h3><p>Lena · 1.8 km</p></div></div>
+    </div>
+  </div>
+  <div class="section"><h2>Use it before it expires</h2>
+    <div class="grid">
+      <div class="card"><div class="photo leaf" style="height:80px">🍳</div><div class="body"><h3>Spinach omelette</h3></div></div>
+      <div class="card"><div class="photo amber" style="height:80px">🍲</div><div class="body"><h3>Lentil soup</h3></div></div>
+      <div class="card"><div class="photo orange" style="height:80px">🥪</div><div class="body"><h3>Tomato toastie</h3></div></div>
+    </div>
+  </div>
+</main>
+
+<aside class="panel detail">
+  <div class="photo orange">🥙</div>
+  <span class="badge today" style="margin-top:var(--space-3)">Until 9:30 pm</span>
+  <div class="title" style="font-size:22px;margin:var(--space-2) 0">Chicken shawarma x4</div>
+  <p style="color:var(--muted);font-size:14px">End-of-day wraps with garlic sauce. Halal. Al Noor Grill, Al Rigga Rd, Dubai.</p>
+  <button class="btn" style="margin-top:var(--space-4)">Claim this food</button>
+</aside>
+
+<footer class="pbar"><span style="font-size:24px">🥙</span><div><b>Active pickup: Chicken shawarma x4</b><br><small>Al Noor Grill · pick up by 9:30 pm</small></div><span class="count">24:10</span></footer>
+<script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script>
+<script>lucide.createIcons();</script>
+</body></html>

@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ResQfood - Home</title><link rel="stylesheet" href="theme.css">
+<style>
+  .head { display: flex; align-items: center; gap: var(--space-3); }
+  .head .hello { flex: 1; }
+  .head small { color: var(--muted); font-size: 13px; }
+  .tiles { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3); }
+  .tile { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3); font-weight: 700; font-size: 14px; }
+  .tile .ico { width: 40px; height: 40px; border-radius: var(--radius-sm); display: grid; place-items: center; font-size: 20px; }
+  .tile small { display: block; font-weight: 500; color: var(--muted); font-size: 11px; }
+  .recipe { width: 150px; flex: none; }
+</style></head><body>
+<div class="phone">
+  <div class="head">
+    <div class="avatar">S</div>
+    <div class="hello"><small>Good evening</small><div class="title" style="font-size:22px">Shaikha</div></div>
+    <img src="logo.jpg" alt="ResQfood" width="44" height="44" style="border-radius:50%;object-fit:cover">
+  </div>
+
+  <div class="section"><div class="tiles">
+    <div class="card tile"><span class="ico" style="background:var(--accent-tint);color:var(--accent)"><i data-lucide="alarm-clock"></i></span><span>Expiring today<small>3 items</small></span></div>
+    <div class="card tile"><span class="ico" style="background:var(--primary-tint);color:var(--primary)"><i data-lucide="handshake"></i></span><span>My claims<small>1 active</small></span></div>
+    <div class="card tile"><span class="ico" style="background:var(--accent-2-tint);color:#8a5b00"><i data-lucide="utensils"></i></span><span>Planner<small>Group meals</small></span></div>
+    <div class="card tile"><span class="ico" style="background:var(--secondary-tint);color:#4d6e1a"><i data-lucide="scan-line"></i></span><span>Scan<small>Receipt or pack</small></span></div>
+  </div></div>
+
+  <div class="section"><h2>Near you <a href="#">See all</a></h2>
+  <div class="scroll">
+    <div class="card listing"><div class="photo orange">🥙</div><div class="body"><h3>Chicken shawarma x4</h3><p>Al Noor Grill · 0.4 km</p><span class="badge today">Until 9:30 pm</span></div></div>
+    <div class="card listing"><div class="photo amber">🥐</div><div class="body"><h3>Bakery box, mixed</h3><p>Baker's Corner · 0.9 km</p><span class="badge expiring">Until 10:00 pm</span></div></div>
+    <div class="card listing"><div class="photo green">🥗</div><div class="body"><h3>Fresh salad bowls</h3><p>Campus Dining · 1.2 km</p><span class="badge fresh">Until 8:00 pm</span></div></div>
+  </div></div>
+
+  <div class="section"><h2>Use it before it expires <a href="#">More</a></h2>
+  <div class="scroll">
+    <div class="card recipe"><div class="photo leaf" style="height:90px">🍳</div><div class="body"><h3>Spinach omelette</h3><p>Uses spinach, eggs</p></div></div>
+    <div class="card recipe"><div class="photo amber" style="height:90px">🍲</div><div class="body"><h3>Lentil soup</h3><p>Uses carrots, lentils</p></div></div>
+    <div class="card recipe"><div class="photo orange" style="height:90px">🥪</div><div class="body"><h3>Tomato toastie</h3><p>Uses tomato, bread</p></div></div>
+  </div></div>
+</div>
+
+<div class="pickup"><div class="thumb">🥙</div><div class="info"><b>Chicken shawarma x4</b><small>Al Noor Grill · Pick up by 9:30 pm</small></div><span class="count">24:10</span></div>
+<nav class="tabbar">
+  <div class="tab on"><span class="ico"><i data-lucide="house"></i></span>Home</div>
+  <div class="tab"><span class="ico"><i data-lucide="search"></i></span>Find Food</div>
+  <div class="tab"><span class="ico"><i data-lucide="carrot"></i></span>My Food</div>
+  <div class="tab"><span class="ico"><i data-lucide="circle-plus"></i></span>Create</div>
+
+</nav>
+<script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script>
+<script>lucide.createIcons();</script>
+ </body></html>

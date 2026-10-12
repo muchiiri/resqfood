@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ResQfood - Find Food</title><link rel="stylesheet" href="theme.css">
+<style>
+  .cats { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3); }
+  .cat { padding: var(--space-4); border-radius: var(--radius); font-weight: 700; font-size: 15px; height: 76px; display: flex; justify-content: space-between; align-items: flex-end; }
+  .cat .lucide { width: 28px; height: 28px; color: var(--primary); }
+  .list { display: grid; gap: var(--space-3); }
+  .item { display: flex; }
+  .item .photo { width: 96px; height: auto; flex: none; font-size: 36px; }
+  .item .body { flex: 1; }
+</style></head><body>
+<div class="phone">
+  <div class="title">Find Food</div>
+  <div class="section" style="margin-top:var(--space-4)"><div class="search"><i data-lucide="search"></i> Search meals, bakery, campus…</div></div>
+
+  <div class="section"><h2>Browse</h2><div class="cats">
+    <div class="cat" style="background:var(--accent-tint)">Meals <i data-lucide="soup"></i></div>
+    <div class="cat" style="background:var(--secondary-tint)">Groceries <i data-lucide="shopping-basket"></i></div>
+    <div class="cat" style="background:var(--accent-2-tint)">Bakery <i data-lucide="croissant"></i></div>
+    <div class="cat" style="background:var(--primary-tint)">Restaurants <i data-lucide="utensils"></i></div>
+    <div class="cat" style="background:var(--secondary-tint);grid-column:span 2">Campus dining <i data-lucide="graduation-cap"></i></div>
+  </div></div>
+
+  <div class="section"><h2>Available nearby</h2>
+    <div class="scroll" style="margin-bottom:var(--space-3)">
+      <span class="chip on">All</span><span class="chip">Under 1 km</span><span class="chip">Meals</span><span class="chip">Halal</span><span class="chip">Vegetarian</span><span class="chip">Ready now</span>
+    </div>
+    <div class="list">
+      <div class="card item"><div class="photo orange">🥙</div><div class="body"><h3>Chicken shawarma x4</h3><p>Al Noor Grill · 0.4 km · 4 left</p><span class="badge today">Until 9:30 pm</span></div></div>
+      <div class="card item"><div class="photo amber">🥐</div><div class="body"><h3>Bakery box, mixed</h3><p>Baker's Corner · 0.9 km · 2 left</p><span class="badge expiring">Until 10:00 pm</span></div></div>
+      <div class="card item"><div class="photo green">🥗</div><div class="body"><h3>Fresh salad bowls</h3><p>Campus Dining · 1.2 km · 6 left</p><span class="badge fresh">Until 8:00 pm</span></div></div>
+      <div class="card item"><div class="photo leaf">🍚</div><div class="body"><h3>Biryani, family tray</h3><p>Lena (student) · 1.8 km · 1 left</p><span class="badge fresh">Until 11:00 pm</span></div></div>
+    </div>
+  </div>
+</div>
+<nav class="tabbar">
+  <div class="tab"><span class="ico"><i data-lucide="house"></i></span>Home</div>
+  <div class="tab on"><span class="ico"><i data-lucide="search"></i></span>Find Food</div>
+  <div class="tab"><span class="ico"><i data-lucide="carrot"></i></span>My Food</div>
+  <div class="tab"><span class="ico"><i data-lucide="circle-plus"></i></span>Create</div>
+
+</nav>
+<script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script>
+<script>lucide.createIcons();</script>
+</body></html>

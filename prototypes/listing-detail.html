@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ResQfood - Listing detail</title><link rel="stylesheet" href="theme.css">
+<style>
+  .hero { height: 280px; margin: calc(var(--space-5) * -1) calc(var(--space-4) * -1) 0; background: var(--accent-tint); display: grid; place-items: center; font-size: 110px; position: relative; }
+  .back { position: absolute; top: 16px; left: 16px; width: 38px; height: 38px; border-radius: 50%; background: var(--bar); display: grid; place-items: center; font-size: 18px; }
+  .sheet { background: var(--bg); border-radius: 24px 24px 0 0; margin: -24px calc(var(--space-4) * -1) 0; padding: var(--space-5) var(--space-4); position: relative; }
+  .facts { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3); margin: var(--space-4) 0; }
+  .fact { padding: var(--space-3); }
+  .fact small { color: var(--muted); font-size: 11px; display: block; }
+  .fact b { font-size: 15px; }
+  .poster { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3); margin-bottom: var(--space-4); }
+  .scrim { position: fixed; inset: 0; background: rgba(26, 46, 31, 0.45); display: none; }
+  .scrim.open, .create.open { display: block; }
+  .create { display: none; position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 390px; max-width: 100%; background: var(--surface); border-radius: 24px 24px 0 0; padding: var(--space-3) var(--space-4) 28px; }
+  .grab { width: 40px; height: 4px; border-radius: 4px; background: var(--border); margin: 0 auto var(--space-4); }
+  .act { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3) 0; font-weight: 600; border-bottom: 1px solid var(--border); }
+  .act:last-child { border: 0; }
+  .act .ico { width: 42px; height: 42px; border-radius: var(--radius-sm); display: grid; place-items: center; font-size: 20px; }
+</style></head><body>
+<div class="phone" style="padding-bottom:40px">
+  <div class="hero">🥙<div class="back"><i data-lucide="chevron-left"></i></div></div>
+  <div class="sheet">
+    <span class="badge today">Available until 9:30 pm</span>
+    <div class="title" style="margin-top:var(--space-2)">Chicken shawarma x4</div>
+    <p style="color:var(--muted);font-size:14px;margin-top:6px">End-of-day wraps with garlic sauce and pickles, packed fresh at 6 pm. Halal. Please bring a bag.</p>
+    <div class="facts">
+      <div class="card fact"><small>Quantity</small><b>4 wraps</b></div>
+      <div class="card fact"><small>Distance</small><b>0.4 km</b></div>
+      <div class="card fact" style="grid-column:span 2"><small>Pickup location</small><b>Al Noor Grill, Al Rigga Rd, Dubai</b></div>
+    </div>
+    <div class="card poster"><div class="avatar">A</div><div style="flex:1"><b style="font-size:14px">Al Noor Grill</b><p style="font-size:12px;color:var(--muted)">Restaurant · open until 11 pm</p></div></div>
+    <button class="btn">Claim this food</button>
+    <button class="btn secondary" style="margin-top:var(--space-3)" id="open">Open Create sheet</button>
+  </div>
+</div>
+
+<div class="scrim" id="scrim"></div>
+<div class="create" id="create">
+  <div class="grab"></div>
+  <div class="act"><span class="ico" style="background:var(--accent-tint);color:var(--accent)"><i data-lucide="share-2"></i></span>Share food</div>
+  <div class="act"><span class="ico" style="background:var(--secondary-tint);color:#4d6e1a"><i data-lucide="carrot"></i></span>Add item</div>
+  <div class="act"><span class="ico" style="background:var(--accent-2-tint);color:#8a5b00"><i data-lucide="scan-line"></i></span>Scan receipt</div>
+  <div class="act"><span class="ico" style="background:var(--primary-tint);color:var(--primary)"><i data-lucide="utensils"></i></span>Plan portions</div>
+</div>
+<script>
+  const els = ['scrim', 'create'].map(i => document.getElementById(i));
+  const toggle = on => els.forEach(e => e.classList.toggle('open', on));
+  document.getElementById('open').onclick = () => toggle(true);
+  document.getElementById('scrim').onclick = () => toggle(false);
+</script>
+<script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script>
+<script>lucide.createIcons();</script>
+</body></html>
