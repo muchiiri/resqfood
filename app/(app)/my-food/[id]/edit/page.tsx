@@ -1,6 +1,8 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { ExpiryBadge } from "@/app/components/expiry-badge";
+import { getExpiryStatus, todayInDubai } from "@/lib/pantry/expiry";
 import { getFoodItem } from "@/lib/pantry/queries";
 import { updateFoodItem } from "../../actions";
 import { DeleteItem } from "../../delete-item";
@@ -12,9 +14,13 @@ async function EditForm({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const item = await getFoodItem(id);
   if (!item) notFound();
+  const { status, daysLeft } = getExpiryStatus(item.expiresAt, todayInDubai());
 
   return (
     <div className="flex flex-col gap-10">
+      <div>
+        <ExpiryBadge status={status} daysLeft={daysLeft} />
+      </div>
       <FoodItemForm
         action={updateFoodItem.bind(null, item.id)}
         initial={{

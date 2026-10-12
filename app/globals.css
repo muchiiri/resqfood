@@ -39,6 +39,8 @@
   --color-expiring-tint: var(--expiring-tint);
   --color-today: var(--today);
   --color-today-tint: var(--today-tint);
+  --color-expired: var(--expired);
+  --color-expired-foreground: var(--expired-foreground);
   --color-primary-tint: var(--primary-tint);
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
@@ -79,6 +81,8 @@
   --expiring-tint: #fcefd3;
   --today: #b2450f;
   --today-tint: #fbe5da;
+  --expired: #c62828;
+  --expired-foreground: #ffffff;
 
   --sidebar: #fbf8ee;
   --sidebar-foreground: #1a2e1f;

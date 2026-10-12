@@ -3,6 +3,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ChevronRight, Plus } from "lucide-react";
 import { CATEGORY_LABELS, KIND_LABELS, UNIT_LABELS } from "@/lib/pantry/items";
+import { ExpiryBadge } from "@/app/components/expiry-badge";
+import { getExpiryStatus, todayInDubai } from "@/lib/pantry/expiry";
 import { formatDate } from "@/lib/pantry/format";
 import { listFoodItems } from "@/lib/pantry/queries";
 
@@ -26,9 +28,13 @@ async function FoodList() {
     );
   }
 
+  const today = todayInDubai();
+
   return (
     <ul className="flex max-w-2xl flex-col gap-3">
-      {items.map((item) => (
+      {items.map((item) => {
+        const { status, daysLeft } = getExpiryStatus(item.expiresAt, today);
+        return (
         <li key={item.id}>
           <Link
             href={`/my-food/${item.id}/edit`}
@@ -43,11 +49,13 @@ async function FoodList() {
                 Bought or saved {formatDate(item.purchasedAt)} · Expires {formatDate(item.expiresAt)}
               </p>
             </div>
+            <ExpiryBadge status={status} daysLeft={daysLeft} />
             <ChevronRight className="size-5 shrink-0 text-muted-foreground" aria-hidden="true" />
             <span className="sr-only">Edit {item.name}</span>
           </Link>
         </li>
-      ))}
+        );
+      })}
     </ul>
   );
 }
