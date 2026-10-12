@@ -9,12 +9,12 @@ import { DetailPanel } from "./detail-panel";
 import { PickupBar } from "./pickup-bar";
 import { PickupDetails } from "./pickup-details";
 import { usePlaceholderPickup } from "./pickup";
-import { ProfileSheet } from "./profile-sheet";
+import { ProfileSheet, type UserSummary } from "./profile-sheet";
 import { Sidebar } from "./sidebar";
 import { TopBar } from "./top-bar";
 import { useBreakpoint } from "./use-breakpoint";
 
-export function AppShell({ children }: { children: ReactNode }) {
+export function AppShell({ user, children }: { user: UserSummary; children: ReactNode }) {
   const [createOpen, setCreateOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const [pickupOpen, setPickupOpen] = useState(false);
@@ -33,7 +33,7 @@ export function AppShell({ children }: { children: ReactNode }) {
       <BottomTabBar onCreate={() => setCreateOpen(true)} />
 
       <CreateDrawer open={createOpen} onOpenChange={setCreateOpen} />
-      <ProfileSheet open={profileOpen} onOpenChange={setProfileOpen} />
+      <ProfileSheet open={profileOpen} onOpenChange={setProfileOpen} user={user} />
 
       {pickup && breakpoint === "mobile" && (
         <Drawer open={pickupOpen} onOpenChange={setPickupOpen}>

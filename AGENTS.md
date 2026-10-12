@@ -40,6 +40,14 @@ and installed dependencies before adding machinery.
 - Next.js 16 (App Router), React 19, TypeScript, Tailwind CSS 4
 - Package manager: npm (`package-lock.json`)
 - Source lives in `app/`
+- Auth and database: Supabase. SQL migrations live in `supabase/migrations/` and are applied by hand (SQL editor or CLI).
+
+## Environment
+
+Set in `.env.local` (git-ignored):
+
+- `NEXT_PUBLIC_SUPABASE_URL`
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY`
 
 ## Commands
 
