@@ -3,10 +3,12 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ExpiryBadge } from "@/app/components/expiry-badge";
 import { getExpiryStatus, todayInDubai } from "@/lib/pantry/expiry";
+import { UNIT_LABELS } from "@/lib/pantry/items";
 import { getFoodItem } from "@/lib/pantry/queries";
-import { updateFoodItem } from "../../actions";
+import { recordOutcome, updateFoodItem } from "../../actions";
 import { DeleteItem } from "../../delete-item";
 import { FoodItemForm } from "../../food-item-form";
+import { OutcomeForm } from "../../outcome-form";
 
 export const metadata: Metadata = { title: "Edit item | ResQfood" };
 
@@ -33,6 +35,11 @@ async function EditForm({ params }: { params: Promise<{ id: string }> }) {
           expiresAt: item.expiresAt,
         }}
         submitLabel="Save changes"
+      />
+      <OutcomeForm
+        action={recordOutcome.bind(null, item.id)}
+        initial={{ outcome: "", quantity: String(item.quantity) }}
+        unitLabel={UNIT_LABELS[item.unit]}
       />
       <div className="max-w-xl">
         <DeleteItem id={item.id} name={item.name} />

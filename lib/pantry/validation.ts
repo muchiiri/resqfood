@@ -1,4 +1,5 @@
 import { isCategory, isKind, isUnit, type Category, type FoodItemValues, type Kind, type Unit } from "./items";
+import { isOutcome, type Outcome, type OutcomeValues } from "./outcomes";
 
 export const MAX_NAME_LENGTH = 100;
 export const MAX_QUANTITY = 100000;
@@ -66,4 +67,26 @@ export function validateFoodItem(input: FoodItemValues): { fieldErrors: FoodItem
       expiresAt: input.expiresAt,
     },
   };
+}
+
+export type OutcomeFieldErrors = Partial<Record<keyof OutcomeValues, string>>;
+
+export function validateOutcome(
+  input: OutcomeValues,
+  availableQuantity: number,
+): { fieldErrors: OutcomeFieldErrors; valid?: { outcome: Outcome; quantity: number } } {
+  const fieldErrors: OutcomeFieldErrors = {};
+  const quantityText = input.quantity.trim();
+  const quantity = Number(quantityText);
+
+  if (!isOutcome(input.outcome)) fieldErrors.outcome = "Choose eaten, shared or thrown away.";
+
+  if (!QUANTITY_PATTERN.test(quantityText) || quantity <= 0) {
+    fieldErrors.quantity = "Enter a number above 0, with at most 2 decimals.";
+  } else if (quantity > availableQuantity) {
+    fieldErrors.quantity = `You only have ${availableQuantity} of this item.`;
+  }
+
+  if (Object.keys(fieldErrors).length > 0) return { fieldErrors };
+  return { fieldErrors, valid: { outcome: input.outcome as Outcome, quantity } };
 }

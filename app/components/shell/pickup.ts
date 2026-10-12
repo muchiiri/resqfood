@@ -2,20 +2,24 @@ import { useSyncExternalStore } from "react";
 
 export type Pickup = { title: string; place: string; deadline: Date };
 
-const noopSubscribe = () => () => {};
-
-// Placeholder until feature 14 (Claim & pickup) supplies real claims. Created on
-// the client only, because cache components forbid reading the clock while prerendering.
+// Placeholder until feature 14 (Claim & pickup) supplies real claims. The clock is read
+// only inside subscribe (which runs after mount), never while rendering: Cache Components
+// reject Date.now() during prerender, and React may call getSnapshot during that render.
 let placeholder: Pickup | null = null;
+
+function subscribePlaceholder() {
+  placeholder ??= {
+    title: "Chicken shawarma x4",
+    place: "Al Noor Grill",
+    deadline: new Date(Date.now() + 90 * 60_000),
+  };
+  return () => {};
+}
+
 export function usePlaceholderPickup(): Pickup | null {
   return useSyncExternalStore(
-    noopSubscribe,
-    () =>
-      (placeholder ??= {
-        title: "Chicken shawarma x4",
-        place: "Al Noor Grill",
-        deadline: new Date(Date.now() + 90 * 60_000),
-      }),
+    subscribePlaceholder,
+    () => placeholder,
     () => null,
   );
 }

@@ -7,6 +7,7 @@ import { ExpiryBadge } from "@/app/components/expiry-badge";
 import { getExpiryStatus, todayInDubai } from "@/lib/pantry/expiry";
 import { formatDate } from "@/lib/pantry/format";
 import { listFoodItems } from "@/lib/pantry/queries";
+import { RecentOutcomes } from "./recent-outcomes";
 
 export const metadata: Metadata = { title: "My Food | ResQfood" };
 
@@ -82,6 +83,9 @@ export default function MyFoodPage() {
       </div>
       <Suspense fallback={<ListSkeleton />}>
         <FoodList />
+      </Suspense>
+      <Suspense fallback={null}>
+        <RecentOutcomes />
       </Suspense>
     </main>
   );

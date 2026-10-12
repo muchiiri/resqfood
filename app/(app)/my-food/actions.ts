@@ -5,7 +5,15 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { getCurrentUser } from "@/lib/auth/session";
 import type { FoodItemValues } from "@/lib/pantry/items";
-import { isUuid, validateFoodItem, type FoodItemFieldErrors } from "@/lib/pantry/validation";
+import type { OutcomeValues } from "@/lib/pantry/outcomes";
+import { getFoodItem } from "@/lib/pantry/queries";
+import {
+  isUuid,
+  validateFoodItem,
+  validateOutcome,
+  type FoodItemFieldErrors,
+  type OutcomeFieldErrors,
+} from "@/lib/pantry/validation";
 
 export type FoodItemState = { values: FoodItemValues; error?: string; fieldErrors?: FoodItemFieldErrors };
 export type DeleteState = { error?: string };
@@ -95,6 +103,46 @@ export async function deleteFoodItem(id: string): Promise<DeleteState> {
     .eq("owner_id", user.id)
     .select("id");
   if (error || !data || data.length !== 1) return { error: GENERIC_ERROR };
+
+  revalidatePath("/my-food");
+  redirect("/my-food");
+}
+
+export type OutcomeState = { values: OutcomeValues; error?: string; fieldErrors?: OutcomeFieldErrors };
+export type RestoreState = { error?: string };
+
+export async function recordOutcome(id: string, _prev: OutcomeState, formData: FormData): Promise<OutcomeState> {
+  const values: OutcomeValues = { outcome: text(formData, "outcome"), quantity: text(formData, "quantity") };
+  const user = await getCurrentUser();
+  if (!user) return { values, error: "Please log in again." };
+  if (!isUuid(id)) return { values, error: GENERIC_ERROR };
+
+  const item = await getFoodItem(id);
+  if (!item) return { values, error: GENERIC_ERROR };
+
+  const { fieldErrors, valid } = validateOutcome(values, item.quantity);
+  if (!valid) return { values, fieldErrors };
+
+  const supabase = await createClient();
+  const { error } = await supabase.rpc("record_food_outcome", {
+    p_item_id: id,
+    p_outcome: valid.outcome,
+    p_quantity: valid.quantity,
+  });
+  if (error) return { values, error: GENERIC_ERROR };
+
+  revalidatePath("/my-food");
+  redirect("/my-food");
+}
+
+export async function restoreOutcome(id: string): Promise<RestoreState> {
+  const user = await getCurrentUser();
+  if (!user) return { error: "Please log in again." };
+  if (!isUuid(id)) return { error: GENERIC_ERROR };
+
+  const supabase = await createClient();
+  const { error } = await supabase.rpc("restore_food_outcome", { p_item_id: id });
+  if (error) return { error: GENERIC_ERROR };
 
   revalidatePath("/my-food");
   redirect("/my-food");
