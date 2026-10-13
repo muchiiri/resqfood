@@ -1,5 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
+import { connection } from "next/server";
 
 export function supabaseEnv() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -11,6 +12,9 @@ export function supabaseEnv() {
 
 export async function createClient() {
   const { url, anonKey } = supabaseEnv();
+  // Supabase reads the clock (Date.now) to check the session's expiry on every auth and query call. connection()
+  // keeps that work at request time, so Cache Components does not see it while prerendering or prefetching.
+  await connection();
   const cookieStore = await cookies();
   return createServerClient(url, anonKey, {
     cookies: {

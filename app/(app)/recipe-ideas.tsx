@@ -1,3 +1,4 @@
+import { connection } from "next/server";
 import { getProfile } from "@/lib/auth/session";
 import { todayInDubai } from "@/lib/pantry/expiry";
 import { listExpiringItems } from "@/lib/pantry/queries";
@@ -20,8 +21,9 @@ function EmptyMessage({ children }: { children: string }) {
 }
 
 export async function RecipeIdeas() {
-  // The clock is read only after request data has been read (Cache Components).
+  // connection() keeps the clock read out of prerendering and prefetching (Cache Components).
   const [profile, recipes] = await Promise.all([getProfile(), listRecipes()]);
+  await connection();
   const today = todayInDubai();
   const items = await listExpiringItems(today);
 

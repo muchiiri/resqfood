@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
+import { connection } from "next/server";
 import { Search, ScanLine, Share2, Utensils, type LucideIcon } from "lucide-react";
 import { getCurrentUser, getProfile } from "@/lib/auth/session";
 import { dubaiHour, greetingText, partOfDay, WELCOME_LINES } from "@/lib/home/greeting";
@@ -56,9 +57,10 @@ function DashboardSkeleton() {
   );
 }
 
-// The hour is read here, on the server, after the profile (request data) has been read.
+// The hour is read here, on the server, after connection() has kept the clock out of prerendering.
 async function Greeting() {
   const [user, profile] = await Promise.all([getCurrentUser(), getProfile()]);
+  await connection();
   const text = greetingText(partOfDay(dubaiHour(new Date())), profile?.name);
   return (
     <header>

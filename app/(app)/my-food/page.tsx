@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
+import { connection } from "next/server";
 import { ChevronRight, Plus } from "lucide-react";
 import { CATEGORY_LABELS, KIND_LABELS, UNIT_LABELS } from "@/lib/pantry/items";
 import { MY_FOOD_TABS, SectionTabs } from "@/app/components/section-tabs";
@@ -30,6 +31,7 @@ async function FoodList() {
     );
   }
 
+  await connection();
   const today = todayInDubai();
 
   return (

@@ -1,4 +1,5 @@
 import "server-only";
+import { connection } from "next/server";
 import { getCurrentUser } from "@/lib/auth/session";
 import { isCategory, isUnit } from "@/lib/pantry/items";
 import { isUuid } from "@/lib/pantry/validation";
@@ -84,11 +85,12 @@ export async function listMyListings(): Promise<Listing[]> {
 }
 
 // The viewer's own listings that are still on offer (available, or claimed and waiting for handover),
-// soonest end time first. The clock is read after the session lookup, so this is request-time only.
+// soonest end time first. connection() keeps the clock read below out of prerendering and prefetching.
 export async function listActivePostings(): Promise<Listing[]> {
   const user = await getCurrentUser();
   if (!user) return [];
 
+  await connection();
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("listings")

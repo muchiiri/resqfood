@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { connection } from "next/server";
 import { ChevronLeft, Clock } from "lucide-react";
 import { getProfile } from "@/lib/auth/session";
 import { todayInDubai } from "@/lib/pantry/expiry";
@@ -17,6 +18,7 @@ async function RecipeDetail({ params }: { params: Promise<{ id: string }> }) {
   if (!recipe) notFound();
 
   const profile = await getProfile();
+  await connection();
   const today = todayInDubai();
   const items = await listExpiringItems(today);
   const usable = matchRecipes({ items, recipes: [recipe], preferences: [], today, limit: 1 })[0]?.matchedItems ?? [];

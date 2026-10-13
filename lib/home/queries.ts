@@ -1,4 +1,5 @@
 import "server-only";
+import { connection } from "next/server";
 import { getCurrentUser } from "@/lib/auth/session";
 import { getActiveClaims } from "@/lib/claims/queries";
 import type { ClaimStatus } from "@/lib/claims/types";
@@ -31,10 +32,11 @@ export type HomeData = {
   totals: StatsTotals;
 };
 
-// Everything the Home dashboard shows, for the signed-in user only. The clock is read after the session lookup.
+// Everything the Home dashboard shows, for the signed-in user only. connection() keeps the clock read out of prerendering.
 export async function getHomeData(): Promise<HomeData | null> {
   const user = await getCurrentUser();
   if (!user) return null;
+  await connection();
   const today = todayInDubai();
 
   const supabase = await createClient();
