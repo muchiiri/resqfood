@@ -16,6 +16,7 @@ import {
 } from "@/lib/pantry/items";
 import { MAX_NAME_LENGTH, MAX_QUANTITY } from "@/lib/pantry/validation";
 import { type FoodItemState } from "./actions";
+import { DateScanner } from "./date-scanner";
 
 type FormAction = (prev: FoodItemState, formData: FormData) => Promise<FoodItemState>;
 
@@ -155,6 +156,8 @@ export function FoodItemForm({
       </p>
       <FieldError id="quantity-error" message={errors.quantity} />
       <FieldError id="unit-error" message={errors.unit} />
+
+      <DateScanner />
 
       <div className="flex flex-col gap-2">
         <Label htmlFor="purchasedAt">Bought or saved on</Label>
