@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
+import { MY_FOOD_TABS, SectionTabs } from "@/app/components/section-tabs";
 import { listMyClaims } from "@/lib/claims/queries";
 import { CLAIM_STATUS_LABELS, type ClaimSummary } from "@/lib/claims/types";
 import { formatDateTime } from "@/lib/notifications/format";
@@ -73,7 +74,8 @@ async function MyClaims() {
 export default function MyClaimsPage() {
   return (
     <main>
-      <h1 className="mb-6 max-w-2xl text-3xl font-extrabold tracking-tight">My claims</h1>
+      <h1 className="mb-3 max-w-2xl text-3xl font-extrabold tracking-tight">My claims</h1>
+      <SectionTabs label="My Food sections" tabs={MY_FOOD_TABS} active="claims" className="mb-5" />
       <Suspense fallback={<div className="h-24 max-w-2xl animate-pulse rounded-2xl bg-muted" aria-hidden="true" />}>
         <MyClaims />
       </Suspense>

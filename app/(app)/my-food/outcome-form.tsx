@@ -90,6 +90,40 @@ export function OutcomeForm({
           <FieldError id="outcome-quantity-error" message={errors.quantity} />
         </div>
 
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="outcome-weight">Weight in kg (optional)</Label>
+          <Input
+            id="outcome-weight"
+            name="weightKg"
+            inputMode="decimal"
+            defaultValue={values.weightKg}
+            aria-invalid={errors.weightKg ? true : undefined}
+            aria-describedby={["outcome-weight-hint", errors.weightKg ? "outcome-weight-error" : null].filter(Boolean).join(" ")}
+            className="h-11 w-40 bg-card"
+          />
+          <p id="outcome-weight-hint" className="text-sm text-muted-foreground">
+            Filled in for you when the unit is kg or g. Leave empty if you do not know.
+          </p>
+          <FieldError id="outcome-weight-error" message={errors.weightKg} />
+        </div>
+
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="outcome-value">Estimated value in AED (optional)</Label>
+          <Input
+            id="outcome-value"
+            name="estimatedValue"
+            inputMode="decimal"
+            defaultValue={values.estimatedValue}
+            aria-invalid={errors.estimatedValue ? true : undefined}
+            aria-describedby={["outcome-value-hint", errors.estimatedValue ? "outcome-value-error" : null].filter(Boolean).join(" ")}
+            className="h-11 w-40 bg-card"
+          />
+          <p id="outcome-value-hint" className="text-sm text-muted-foreground">
+            What this amount was worth. Leave empty if you do not know.
+          </p>
+          <FieldError id="outcome-value-error" message={errors.estimatedValue} />
+        </div>
+
         <Button type="submit" disabled={pending} variant="outline" className="h-12 w-fit rounded-full px-6 font-bold">
           {pending ? "Recording..." : "Record outcome"}
         </Button>

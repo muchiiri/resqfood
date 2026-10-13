@@ -6,6 +6,7 @@ import { createClient } from "@/lib/supabase/server";
 import { getCurrentUser } from "@/lib/auth/session";
 import type { FoodItemValues } from "@/lib/pantry/items";
 import type { OutcomeValues } from "@/lib/pantry/outcomes";
+import { defaultWeightKg, validateExtras } from "@/lib/waste/validation";
 import { getFoodItem } from "@/lib/pantry/queries";
 import {
   isUuid,
@@ -112,7 +113,12 @@ export type OutcomeState = { values: OutcomeValues; error?: string; fieldErrors?
 export type RestoreState = { error?: string };
 
 export async function recordOutcome(id: string, _prev: OutcomeState, formData: FormData): Promise<OutcomeState> {
-  const values: OutcomeValues = { outcome: text(formData, "outcome"), quantity: text(formData, "quantity") };
+  const values: OutcomeValues = {
+    outcome: text(formData, "outcome"),
+    quantity: text(formData, "quantity"),
+    weightKg: text(formData, "weightKg"),
+    estimatedValue: text(formData, "estimatedValue"),
+  };
   const user = await getCurrentUser();
   if (!user) return { values, error: "Please log in again." };
   if (!isUuid(id)) return { values, error: GENERIC_ERROR };
@@ -121,13 +127,16 @@ export async function recordOutcome(id: string, _prev: OutcomeState, formData: F
   if (!item) return { values, error: GENERIC_ERROR };
 
   const { fieldErrors, valid } = validateOutcome(values, item.quantity);
-  if (!valid) return { values, fieldErrors };
+  const extras = validateExtras(values);
+  if (!valid || !extras.valid) return { values, fieldErrors: { ...fieldErrors, ...extras.fieldErrors } };
 
   const supabase = await createClient();
   const { error } = await supabase.rpc("record_food_outcome", {
     p_item_id: id,
     p_outcome: valid.outcome,
     p_quantity: valid.quantity,
+    p_weight_kg: extras.valid.weightKg ?? defaultWeightKg(valid.quantity, item.unit),
+    p_estimated_value: extras.valid.estimatedValue,
   });
   if (error) return { values, error: GENERIC_ERROR };
 

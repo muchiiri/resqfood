@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
-import Link from "next/link";
+import { SectionTabs } from "@/app/components/section-tabs";
 import { getProfile } from "@/lib/auth/session";
 import { formatDateTime } from "@/lib/notifications/format";
 import { MAX_PEOPLE, MIN_PEOPLE } from "@/lib/portions/plan";
@@ -48,22 +48,7 @@ async function PlanContent({ searchParams }: { searchParams: SearchParams }) {
 
   return (
     <>
-      <nav aria-label="Planner" className="flex gap-6 border-b">
-        {TABS.map(({ id, label, href }) => (
-          <Link
-            key={id}
-            href={href}
-            aria-current={tab === id ? "page" : undefined}
-            className={`-mb-px inline-flex min-h-11 items-center border-b-2 px-1 text-sm font-semibold outline-none focus-visible:rounded-sm focus-visible:ring-3 focus-visible:ring-ring/50 ${
-              tab === id
-                ? "border-primary text-primary"
-                : "border-transparent text-muted-foreground hover:text-foreground"
-            }`}
-          >
-            {label}
-          </Link>
-        ))}
-      </nav>
+      <SectionTabs label="Planner" tabs={TABS} active={tab} />
 
       {tab === "group" ? (
         <GroupForm />

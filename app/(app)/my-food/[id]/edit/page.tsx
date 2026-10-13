@@ -38,7 +38,7 @@ async function EditForm({ params }: { params: Promise<{ id: string }> }) {
       />
       <OutcomeForm
         action={recordOutcome.bind(null, item.id)}
-        initial={{ outcome: "", quantity: String(item.quantity) }}
+        initial={{ outcome: "", quantity: String(item.quantity), weightKg: "", estimatedValue: "" }}
         unitLabel={UNIT_LABELS[item.unit]}
       />
       <div className="max-w-xl">

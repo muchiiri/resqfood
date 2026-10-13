@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ChevronRight, Plus } from "lucide-react";
+import { MY_FOOD_TABS, SectionTabs } from "@/app/components/section-tabs";
 import { listMyListings } from "@/lib/listings/queries";
 import { LISTING_STATUS_LABELS } from "@/lib/listings/types";
 import { formatDateTime } from "@/lib/notifications/format";
@@ -53,13 +54,14 @@ async function MyListings() {
 export default function MyListingsPage() {
   return (
     <main>
-      <div className="mb-6 flex max-w-2xl items-center justify-between gap-4">
+      <div className="mb-3 flex max-w-2xl items-center justify-between gap-4">
         <h1 className="text-3xl font-extrabold tracking-tight">My listings</h1>
         <Link href="/listings/new" className={shareLinkClass}>
           <Plus className="size-5" aria-hidden="true" />
           Share food
         </Link>
       </div>
+      <SectionTabs label="My Food sections" tabs={MY_FOOD_TABS} active="listings" className="mb-5" />
       <Suspense fallback={<div className="h-24 max-w-2xl animate-pulse rounded-2xl bg-muted" aria-hidden="true" />}>
         <MyListings />
       </Suspense>

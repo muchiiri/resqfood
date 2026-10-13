@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ChevronRight, Plus } from "lucide-react";
 import { CATEGORY_LABELS, KIND_LABELS, UNIT_LABELS } from "@/lib/pantry/items";
+import { MY_FOOD_TABS, SectionTabs } from "@/app/components/section-tabs";
 import { ExpiryBadge } from "@/app/components/expiry-badge";
 import { getExpiryStatus, todayInDubai } from "@/lib/pantry/expiry";
 import { formatDate } from "@/lib/pantry/format";
@@ -74,27 +75,16 @@ function ListSkeleton() {
 export default function MyFoodPage() {
   return (
     <main>
-      <div className="mb-6 flex max-w-2xl items-center justify-between gap-4">
+      <div className="mb-3 flex max-w-2xl items-center justify-between gap-4">
         <h1 className="text-3xl font-extrabold tracking-tight">My Food</h1>
         <div className="flex items-center gap-3">
-          <Link
-            href="/listings"
-            className="rounded-lg text-sm font-semibold text-primary outline-none hover:underline focus-visible:ring-3 focus-visible:ring-ring/50"
-          >
-            My listings
-          </Link>
-          <Link
-            href="/claims"
-            className="rounded-lg text-sm font-semibold text-primary outline-none hover:underline focus-visible:ring-3 focus-visible:ring-ring/50"
-          >
-            My claims
-          </Link>
           <Link href="/my-food/new" className={addLinkClass}>
             <Plus className="size-5" aria-hidden="true" />
             Add item
           </Link>
         </div>
       </div>
+      <SectionTabs label="My Food sections" tabs={MY_FOOD_TABS} active="pantry" className="mb-5" />
       <Suspense fallback={<ListSkeleton />}>
         <FoodList />
       </Suspense>

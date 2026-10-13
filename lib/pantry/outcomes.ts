@@ -22,4 +22,4 @@ export type OutcomeRecord = {
 };
 
 // What the outcome form holds: every field as the user typed it.
-export type OutcomeValues = { outcome: string; quantity: string };
+export type OutcomeValues = { outcome: string; quantity: string; weightKg: string; estimatedValue: string };
