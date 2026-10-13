@@ -51,12 +51,15 @@ Set in `.env.local` (git-ignored):
 
 ## Scheduled jobs
 
-Daily work runs inside Supabase with the `pg_cron` extension (enable it under Database, Extensions), not in the app.
+Scheduled work runs inside Supabase with the `pg_cron` extension (enable it under Database, Extensions), not in the app.
 
 - `expiry-reminders`: `select public.send_expiry_reminders();` at 04:00 UTC (08:00 UAE time) writes one expiry digest notification per user per day.
 - Run it by hand: `select public.send_expiry_reminders();` in the SQL editor. It returns how many digests it created and is safe to repeat the same day.
 - Stop it: `select cron.unschedule('expiry-reminders');`
 - Inspect it: `select * from cron.job;` and `select * from cron.job_run_details order by start_time desc;`
+- `listing-expiry`: `select public.expire_listings();` every 5 minutes marks available listings past their available-until time as `expired`. Claimed listings are left alone.
+- Run it by hand: `select public.expire_listings();` in the SQL editor. It returns how many listings it changed and returns 0 when run again.
+- Stop it: `select cron.unschedule('listing-expiry');`
 
 ## Commands
 
