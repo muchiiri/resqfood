@@ -44,10 +44,14 @@ and installed dependencies before adding machinery.
 
 ## Environment
 
-Set in `.env.local` (git-ignored):
+Set in `.env.local` (git-ignored). `.env.example` lists the names with placeholder values:
 
 - `NEXT_PUBLIC_SUPABASE_URL`
 - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+
+## Deployment
+
+The app deploys to Netlify from GitHub. `netlify.toml` and `.nvmrc` hold the build settings; the steps, the Supabase URL settings and the post-deploy checks are in `docs/deploying-to-netlify.md`.
 
 ## Scheduled jobs
 
