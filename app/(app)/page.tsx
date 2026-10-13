@@ -9,6 +9,8 @@ import { getHomeData } from "@/lib/home/queries";
 import { activeClaims, activeListings, claimChartRows, listingChartRows } from "@/lib/home/summary";
 import { formatDateTime } from "@/lib/notifications/format";
 import { formatKg, kgChartRows } from "@/lib/waste/stats";
+import { ScrollRow } from "@/app/components/scroll-row";
+import { CategoryCards, HomeSearch, MessageCards } from "./home-cards";
 import { RecipeIdeas } from "./recipe-ideas";
 import { StatusChart } from "./status-charts";
 import { KgChart } from "./waste-stats/stats-charts";
@@ -33,6 +35,11 @@ const QUICK_LINKS: { label: string; href: string; icon: LucideIcon }[] = [
   { label: "Plan portions", href: "/plan", icon: Utensils },
   { label: "Scan receipt", href: "/my-food/new#scan", icon: ScanLine },
 ];
+
+async function Messages() {
+  const user = await getCurrentUser();
+  return user ? <MessageCards role={user.role} /> : null;
+}
 
 function RecipeSkeleton() {
   return (
@@ -65,23 +72,21 @@ async function Greeting() {
   return (
     <header>
       <h1 className="text-3xl font-extrabold tracking-tight">{text}</h1>
-      {user && <p className="mt-1 max-w-2xl text-muted-foreground">{WELCOME_LINES[user.role]}</p>}
+      {user && <p className="mt-1 max-w-2xl text-xs text-muted-foreground sm:text-sm">{WELCOME_LINES[user.role]}</p>}
     </header>
   );
 }
 
 function SummaryCard({ label, value, hint, href }: { label: string; value: string; hint?: string; href: string }) {
   return (
-    <li>
-      <Link
-        href={href}
-        className="flex h-full flex-col rounded-2xl bg-card p-4 shadow-sm outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
-      >
-        <span className="text-sm font-semibold text-muted-foreground">{label}</span>
-        <span className="mt-1 text-2xl font-extrabold tracking-tight">{value}</span>
-        {hint && <span className="mt-0.5 text-xs text-muted-foreground">{hint}</span>}
-      </Link>
-    </li>
+    <Link
+      href={href}
+      className="flex h-full w-36 flex-col rounded-xl bg-card p-3 shadow-sm outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+    >
+      <span className="text-xs font-semibold text-muted-foreground">{label}</span>
+      <span className="mt-1 text-xl font-extrabold tracking-tight">{value}</span>
+      {hint && <span className="mt-0.5 text-xs text-muted-foreground">{hint}</span>}
+    </Link>
   );
 }
 
@@ -94,29 +99,38 @@ async function Dashboard() {
 
   return (
     <div className="flex max-w-4xl flex-col gap-6">
-      <section aria-labelledby="summary-title" className="flex flex-col gap-3">
-        <h2 id="summary-title" className="text-xl font-extrabold">
-          At a glance
-        </h2>
-        <ul className="grid grid-cols-2 gap-3 md:grid-cols-3">
-          <SummaryCard label="Active listings" value={String(activeListings(data.listings))} href="/listings" />
+      <ScrollRow
+        id="summary"
+        label="summary cards"
+        heading="At a glance"
+        items={[
           <SummaryCard
+            key="listings"
+            label="Active listings"
+            value={String(activeListings(data.listings))}
+            href="/listings"
+          />,
+          <SummaryCard
+            key="claims"
             label="Active claims"
             value={String(activeClaims(data.claims))}
             hint={data.nextPickup ? `Collect by ${formatDateTime(data.nextPickup)}` : "No pickups waiting"}
             href="/claims"
-          />
-          <SummaryCard label="Expiring today" value={String(data.expiring.today)} href="/my-food" />
-          <SummaryCard label="Expiring in 1 to 3 days" value={String(data.expiring.soon)} href="/my-food" />
+          />,
+          <SummaryCard key="today" label="Expiring today" value={String(data.expiring.today)} href="/my-food" />,
+          <SummaryCard key="soon" label="Expiring in 1 to 3 days" value={String(data.expiring.soon)} href="/my-food" />,
           <SummaryCard
+            key="saved"
             label="Saved this month"
             value={formatKg(data.savedThisMonthKg)}
             hint="Eaten plus shared"
             href="/waste-stats"
-          />
-          <SummaryCard label="Unread notifications" value={String(data.unread)} href="/notifications" />
-        </ul>
-      </section>
+          />,
+          <SummaryCard key="unread" label="Unread notifications" value={String(data.unread)} href="/notifications" />,
+        ]}
+      />
+
+      <CategoryCards />
 
       <nav aria-label="Quick actions" className="flex flex-wrap gap-2">
         {QUICK_LINKS.map(({ label, href, icon: Icon }) => (
@@ -179,6 +193,10 @@ export default function Home() {
     <main className="flex flex-col gap-6">
       <Suspense fallback={<div className="h-16 max-w-2xl animate-pulse rounded-2xl bg-muted" aria-hidden="true" />}>
         <Greeting />
+      </Suspense>
+      <HomeSearch />
+      <Suspense fallback={<div className="h-24 max-w-4xl animate-pulse rounded-2xl bg-muted" aria-hidden="true" />}>
+        <Messages />
       </Suspense>
       <Suspense fallback={<DashboardSkeleton />}>
         <Dashboard />
