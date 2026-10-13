@@ -5,10 +5,10 @@ import { isUuid } from "@/lib/pantry/validation";
 import { createClient } from "@/lib/supabase/server";
 import { isListingStatus, type Listing } from "./types";
 
-const COLUMNS =
+export const COLUMNS =
   "id, poster_id, title, description, category, quantity, unit, photo_path, pickup_area, available_until, status, created_at";
 
-type Row = {
+export type Row = {
   id: string;
   poster_id: string;
   title: string;
@@ -23,7 +23,7 @@ type Row = {
   created_at: string;
 };
 
-function toListing(row: Row): Listing {
+export function toListing(row: Row): Listing {
   if (!isCategory(row.category) || !isUnit(row.unit) || !isListingStatus(row.status)) {
     throw new Error("Listing row has an unexpected value");
   }
