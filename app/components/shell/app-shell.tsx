@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { Drawer, DrawerContent, DrawerDescription, DrawerTitle } from "@/components/ui/drawer";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { startInstallListeners } from "@/lib/pwa/install";
 import { BottomTabBar } from "./bottom-tab-bar";
 import { CreateDrawer } from "./create-drawer";
 import { DetailPanel } from "./detail-panel";
@@ -29,6 +30,11 @@ export function AppShell({
   const [profileOpen, setProfileOpen] = useState(false);
   const [pickupOpen, setPickupOpen] = useState(false);
   const breakpoint = useBreakpoint();
+
+  // Keep the browser's install event so the profile menu can offer Install app.
+  useEffect(() => {
+    startInstallListeners();
+  }, []);
 
   return (
     <>
