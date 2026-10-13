@@ -22,7 +22,7 @@ const valueConfig = {
   wasted: { label: "Wasted", color: "var(--chart-3)" },
 } satisfies ChartConfig;
 
-function DataTable({
+export function DataTable({
   caption,
   head,
   rows,
