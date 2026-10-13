@@ -49,6 +49,15 @@ Set in `.env.local` (git-ignored):
 - `NEXT_PUBLIC_SUPABASE_URL`
 - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
 
+## Scheduled jobs
+
+Daily work runs inside Supabase with the `pg_cron` extension (enable it under Database, Extensions), not in the app.
+
+- `expiry-reminders`: `select public.send_expiry_reminders();` at 04:00 UTC (08:00 UAE time) writes one expiry digest notification per user per day.
+- Run it by hand: `select public.send_expiry_reminders();` in the SQL editor. It returns how many digests it created and is safe to repeat the same day.
+- Stop it: `select cron.unschedule('expiry-reminders');`
+- Inspect it: `select * from cron.job;` and `select * from cron.job_run_details order by start_time desc;`
+
 ## Commands
 
 - Dev server: `npm run dev` (http://localhost:3000)
