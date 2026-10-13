@@ -12,7 +12,7 @@ export type UserSummary = { email: string; role: Role };
 
 const ENTRIES: { label: string; icon: LucideIcon; href?: string; showsUnread?: boolean }[] = [
   { label: "Profile", icon: UserRound, href: "/profile" },
-  { label: "Waste stats", icon: ChartColumn },
+  { label: "Waste stats", icon: ChartColumn, href: "/waste-stats" },
   { label: "Notifications", icon: Bell, href: "/notifications", showsUnread: true },
   { label: "Settings", icon: Settings, href: "/profile#notifications" },
 ];

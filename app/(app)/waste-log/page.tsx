@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
+import Link from "next/link";
 import { MY_FOOD_TABS, SectionTabs } from "@/app/components/section-tabs";
 import { dubaiDate } from "@/lib/pantry/expiry";
 import { formatDate } from "@/lib/pantry/format";
@@ -25,7 +26,11 @@ export default function WasteLogPage() {
         <div>
           <h1 className="text-3xl font-extrabold tracking-tight">Waste log</h1>
           <p className="mt-1 max-w-2xl text-sm text-muted-foreground">
-            What you ate, shared or threw away. Outcomes you record on pantry items appear here automatically.
+            What you ate, shared or threw away. Outcomes you record on pantry items appear here automatically.{" "}
+            <Link href="/waste-stats" className="font-semibold text-primary underline">
+              See your stats
+            </Link>
+            .
           </p>
         </div>
       </div>
