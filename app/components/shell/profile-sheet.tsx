@@ -5,13 +5,15 @@ import { Bell, ChartColumn, LogOut, Settings, UserRound, type LucideIcon } from 
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { logOut } from "@/app/(auth)/actions";
 import { ROLE_LABELS, type Role } from "@/lib/auth/roles";
+import { unreadLabel } from "@/lib/notifications/format";
+import { UnreadBadge } from "./unread-badge";
 
 export type UserSummary = { email: string; role: Role };
 
-const ENTRIES: { label: string; icon: LucideIcon; href?: string }[] = [
+const ENTRIES: { label: string; icon: LucideIcon; href?: string; showsUnread?: boolean }[] = [
   { label: "Profile", icon: UserRound, href: "/profile" },
   { label: "Waste stats", icon: ChartColumn },
-  { label: "Notifications", icon: Bell },
+  { label: "Notifications", icon: Bell, href: "/notifications", showsUnread: true },
   { label: "Settings", icon: Settings, href: "/profile#notifications" },
 ];
 
@@ -22,10 +24,12 @@ export function ProfileSheet({
   open,
   onOpenChange,
   user,
+  unreadCount,
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   user: UserSummary;
+  unreadCount: number;
 }) {
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
@@ -35,12 +39,18 @@ export function ProfileSheet({
           <SheetDescription>{ROLE_LABELS[user.role]}</SheetDescription>
         </SheetHeader>
         <ul className="px-4">
-          {ENTRIES.map(({ label, icon: Icon, href }) => (
+          {ENTRIES.map(({ label, icon: Icon, href, showsUnread }) => (
             <li key={label}>
               {href ? (
-                <Link href={href} onClick={() => onOpenChange(false)} className={rowClass}>
+                <Link
+                  href={href}
+                  onClick={() => onOpenChange(false)}
+                  aria-label={showsUnread && unreadCount > 0 ? `${label}, ${unreadLabel(unreadCount)}` : undefined}
+                  className={rowClass}
+                >
                   <Icon className="size-5 text-muted-foreground" aria-hidden="true" />
                   {label}
+                  {showsUnread && <UnreadBadge count={unreadCount} className="ml-auto" />}
                 </Link>
               ) : (
                 <button type="button" aria-disabled="true" className={rowClass}>

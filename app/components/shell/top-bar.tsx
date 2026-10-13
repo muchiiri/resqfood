@@ -1,21 +1,25 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { Bell, Search, UserRound } from "lucide-react";
+import { unreadLabel } from "@/lib/notifications/format";
+import { UnreadBadge } from "./unread-badge";
 
 const iconButton =
-  "grid size-10 shrink-0 place-items-center rounded-full outline-none focus-visible:ring-3 focus-visible:ring-ring/50";
+  "relative grid size-10 shrink-0 place-items-center rounded-full outline-none focus-visible:ring-3 focus-visible:ring-ring/50";
 
-export function TopBar({ onProfile }: { onProfile: () => void }) {
+export function TopBar({ onProfile, unreadCount }: { onProfile: () => void; unreadCount: number }) {
   return (
     <header className="sticky top-0 z-20 flex h-16 items-center gap-3 bg-background/90 px-4 backdrop-blur-md md:px-6">
       <button
         type="button"
         onClick={onProfile}
-        aria-label="Open profile menu"
+        aria-label={unreadCount > 0 ? `Open profile menu, ${unreadLabel(unreadCount)}` : "Open profile menu"}
         className={`${iconButton} bg-secondary text-secondary-foreground md:order-3`}
       >
         <UserRound className="size-5" aria-hidden="true" />
+        <UnreadBadge count={unreadCount} className="absolute -right-1 -top-1 md:hidden" />
       </button>
       <Image
         src="/logo.jpg"
@@ -35,9 +39,14 @@ export function TopBar({ onProfile }: { onProfile: () => void }) {
         />
       </label>
       <div className="hidden flex-1 md:block lg:hidden" />
-      <button type="button" aria-label="Notifications" className={`${iconButton} hidden hover:bg-muted md:order-2 md:grid`}>
+      <Link
+        href="/notifications"
+        aria-label={unreadCount > 0 ? `Notifications, ${unreadLabel(unreadCount)}` : "Notifications"}
+        className={`${iconButton} hidden hover:bg-muted md:order-2 md:grid`}
+      >
         <Bell className="size-5" aria-hidden="true" />
-      </button>
+        <UnreadBadge count={unreadCount} className="absolute -right-1 -top-1" />
+      </Link>
     </header>
   );
 }

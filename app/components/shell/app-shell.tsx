@@ -14,7 +14,15 @@ import { Sidebar } from "./sidebar";
 import { TopBar } from "./top-bar";
 import { useBreakpoint } from "./use-breakpoint";
 
-export function AppShell({ user, children }: { user: UserSummary; children: ReactNode }) {
+export function AppShell({
+  user,
+  unreadCount,
+  children,
+}: {
+  user: UserSummary;
+  unreadCount: number;
+  children: ReactNode;
+}) {
   const [createOpen, setCreateOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const [pickupOpen, setPickupOpen] = useState(false);
@@ -25,7 +33,7 @@ export function AppShell({ user, children }: { user: UserSummary; children: Reac
     <>
       <Sidebar onCreate={() => setCreateOpen(true)} />
       <div className="flex min-h-dvh flex-col md:pl-16 lg:pl-72 lg:pr-80">
-        <TopBar onProfile={() => setProfileOpen(true)} />
+        <TopBar onProfile={() => setProfileOpen(true)} unreadCount={unreadCount} />
         <div className="flex-1 px-4 pb-44 md:px-6 md:pb-24">{children}</div>
       </div>
       <DetailPanel pickup={pickup} />
@@ -33,7 +41,7 @@ export function AppShell({ user, children }: { user: UserSummary; children: Reac
       <BottomTabBar onCreate={() => setCreateOpen(true)} />
 
       <CreateDrawer open={createOpen} onOpenChange={setCreateOpen} />
-      <ProfileSheet open={profileOpen} onOpenChange={setProfileOpen} user={user} />
+      <ProfileSheet open={profileOpen} onOpenChange={setProfileOpen} user={user} unreadCount={unreadCount} />
 
       {pickup && breakpoint === "mobile" && (
         <Drawer open={pickupOpen} onOpenChange={setPickupOpen}>
