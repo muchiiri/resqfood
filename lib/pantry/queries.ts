@@ -1,6 +1,7 @@
 import "server-only";
 import { getCurrentUser } from "@/lib/auth/session";
 import { createClient } from "@/lib/supabase/server";
+import { addDays, SOON_WINDOW_DAYS } from "./expiry";
 import { isCategory, isKind, isUnit, type FoodItem } from "./items";
 import { isOutcome, type OutcomeRecord } from "./outcomes";
 import { isUuid } from "./validation";
@@ -65,6 +66,25 @@ export async function getFoodItem(id: string): Promise<FoodItem | null> {
     .maybeSingle();
   if (error) throw new Error("Could not load food item");
   return data ? toFoodItem(data as Row) : null;
+}
+
+// Active items expiring from today through the soon window (3 days), soonest first.
+export async function listExpiringItems(today: string): Promise<FoodItem[]> {
+  const user = await getCurrentUser();
+  if (!user) return [];
+
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("food_items")
+    .select(COLUMNS)
+    .eq("owner_id", user.id)
+    .is("outcome", null)
+    .gte("expires_at", today)
+    .lte("expires_at", addDays(today, SOON_WINDOW_DAYS))
+    .order("expires_at", { ascending: true })
+    .order("created_at", { ascending: true });
+  if (error) throw new Error("Could not load expiring items");
+  return (data as Row[]).map(toFoodItem);
 }
 
 const RECENT_OUTCOME_LIMIT = 20;

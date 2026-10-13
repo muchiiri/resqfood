@@ -28,3 +28,9 @@ export function getExpiryStatus(expiresAt: string, today: string): { status: Exp
   if (daysLeft <= SOON_WINDOW_DAYS) return { status: "soon", daysLeft };
   return { status: "fresh", daysLeft };
 }
+
+// Adds whole days to a YYYY-MM-DD date without reading the clock.
+export function addDays(date: string, days: number): string {
+  const [year, month, day] = date.split("-").map(Number);
+  return new Date(Date.UTC(year, month - 1, day + days)).toISOString().slice(0, 10);
+}
