@@ -83,6 +83,12 @@ export default function MyFoodPage() {
           >
             My listings
           </Link>
+          <Link
+            href="/claims"
+            className="rounded-lg text-sm font-semibold text-primary outline-none hover:underline focus-visible:ring-3 focus-visible:ring-ring/50"
+          >
+            My claims
+          </Link>
           <Link href="/my-food/new" className={addLinkClass}>
             <Plus className="size-5" aria-hidden="true" />
             Add item

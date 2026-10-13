@@ -1,29 +1,18 @@
 import { useSyncExternalStore } from "react";
 
-export type Pickup = { title: string; place: string; deadline: Date };
+// A claim the viewer is collecting, or a listing the viewer is giving away. Both count down to the listing's end time.
+export type Pickup = {
+  id: string;
+  kind: "claim" | "listing";
+  title: string;
+  place: string;
+  deadline: Date;
+  listingId: string;
+  claimed?: boolean;
+};
 
-// Placeholder until feature 14 (Claim & pickup) supplies real claims. The clock is read
-// only inside subscribe (which runs after mount), never while rendering: Cache Components
-// reject Date.now() during prerender, and React may call getSnapshot during that render.
-let placeholder: Pickup | null = null;
-
-function subscribePlaceholder() {
-  placeholder ??= {
-    title: "Chicken shawarma x4",
-    place: "Al Noor Grill",
-    deadline: new Date(Date.now() + 90 * 60_000),
-  };
-  return () => {};
-}
-
-export function usePlaceholderPickup(): Pickup | null {
-  return useSyncExternalStore(
-    subscribePlaceholder,
-    () => placeholder,
-    () => null,
-  );
-}
-
+// The clock is read only inside subscribe (which runs after mount), never while rendering:
+// Cache Components reject Date.now() during prerender.
 let now = 0;
 const listeners = new Set<() => void>();
 let timer: ReturnType<typeof setInterval> | undefined;

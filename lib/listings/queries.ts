@@ -77,3 +77,22 @@ export async function listMyListings(): Promise<Listing[]> {
   if (error) throw new Error("Could not load your listings");
   return (data as Row[]).map(toListing);
 }
+
+// The viewer's own listings that are still on offer (available, or claimed and waiting for handover),
+// soonest end time first. The clock is read after the session lookup, so this is request-time only.
+export async function listActivePostings(): Promise<Listing[]> {
+  const user = await getCurrentUser();
+  if (!user) return [];
+
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("listings")
+    .select(COLUMNS)
+    .eq("poster_id", user.id)
+    .in("status", ["available", "claimed"])
+    .gt("available_until", new Date().toISOString())
+    .order("available_until", { ascending: true })
+    .limit(10);
+  if (error) throw new Error("Could not load your listings");
+  return (data as Row[]).map(toListing);
+}
