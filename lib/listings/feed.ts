@@ -8,7 +8,12 @@ import type { Listing } from "./types";
 
 // Other people's available listings. Row level security already hides expired ones; the app also
 // removes the viewer's own listings. Only the sanitized search term and validated values reach the filter.
-export async function listFeed({ q, category, sort }: Pick<FeedParams, "q" | "category" | "sort">): Promise<Listing[]> {
+export async function listFeed({
+  q,
+  category,
+  sort,
+  restaurantsOnly,
+}: Pick<FeedParams, "q" | "category" | "sort" | "restaurantsOnly">): Promise<Listing[]> {
   const user = await getCurrentUser();
   if (!user) return [];
 
@@ -16,6 +21,7 @@ export async function listFeed({ q, category, sort }: Pick<FeedParams, "q" | "ca
   let query = supabase.from("listings").select(COLUMNS).eq("status", "available").neq("poster_id", user.id);
 
   if (category) query = query.eq("category", category);
+  if (restaurantsOnly) query = query.not("restaurant_id", "is", null);
 
   const term = sanitizeSearch(q);
   if (term) query = query.or(`title.ilike.%${term}%,pickup_area.ilike.%${term}%`);

@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Clock, MapPin, UtensilsCrossed } from "lucide-react";
+import { Clock, MapPin, Store, UtensilsCrossed } from "lucide-react";
 import { photoUrl } from "@/lib/listings/queries";
 import type { Listing } from "@/lib/listings/types";
 import { formatDateTime } from "@/lib/notifications/format";
@@ -27,6 +27,12 @@ export function ListingCard({ listing, near }: { listing: Listing; near: boolean
         </span>
       )}
       <span className="flex min-w-0 flex-1 flex-col justify-center gap-1 p-3">
+        {listing.restaurantName && (
+          <span className="flex min-w-0 items-center gap-1 text-xs font-bold text-primary">
+            <Store className="size-3.5 shrink-0" aria-hidden="true" />
+            <span className="truncate">Restaurant: {listing.restaurantName}</span>
+          </span>
+        )}
         {near && (
           <span className="w-fit rounded-full bg-primary px-2 py-0.5 text-[11px] font-bold text-primary-foreground">
             Near you

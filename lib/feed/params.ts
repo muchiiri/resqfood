@@ -12,6 +12,7 @@ export type FeedParams = {
   category: Category | null;
   sort: FeedSort;
   page: number;
+  restaurantsOnly: boolean;
 };
 
 type RawParams = Record<string, string | string[] | undefined>;
@@ -27,6 +28,7 @@ export function parseFeedParams(raw: RawParams): FeedParams {
     category: isCategory(category) ? category : null,
     sort: first(raw.sort) === "newest" ? "newest" : "ending",
     page: Number.isFinite(page) ? Math.min(MAX_PAGE, Math.max(1, page)) : 1,
+    restaurantsOnly: first(raw.type) === "restaurants",
   };
 }
 
@@ -37,6 +39,7 @@ export function feedHref(current: FeedParams, changes: Partial<FeedParams>): str
   if (next.q) query.set("q", next.q);
   if (next.category) query.set("cat", next.category);
   if (next.sort !== "ending") query.set("sort", next.sort);
+  if (next.restaurantsOnly) query.set("type", "restaurants");
   if (next.page > 1) query.set("page", String(next.page));
   const text = query.toString();
   return text ? `/find-food?${text}` : "/find-food";

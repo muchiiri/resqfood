@@ -6,11 +6,14 @@ import { createClient } from "@/lib/supabase/server";
 import { isListingStatus, type Listing } from "./types";
 
 export const COLUMNS =
-  "id, poster_id, title, description, category, quantity, unit, photo_path, pickup_area, available_until, status, created_at";
+  "id, poster_id, restaurant_id, title, description, category, quantity, unit, photo_path, pickup_area, available_until, status, created_at, restaurants(business_name)";
 
 export type Row = {
   id: string;
   poster_id: string;
+  restaurant_id: string | null;
+  // A to-one embed arrives as an object; the client types describe it as a list, so accept both.
+  restaurants: { business_name: string } | { business_name: string }[] | null;
   title: string;
   description: string | null;
   category: string;
@@ -40,6 +43,8 @@ export function toListing(row: Row): Listing {
     availableUntil: row.available_until,
     status: row.status,
     createdAt: row.created_at,
+    restaurantId: row.restaurant_id,
+    restaurantName: (Array.isArray(row.restaurants) ? row.restaurants[0] : row.restaurants)?.business_name ?? null,
   };
 }
 

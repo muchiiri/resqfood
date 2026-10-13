@@ -24,6 +24,14 @@ export type RestaurantValues = {
   hours: Record<DayKey, DayFormValue>;
 };
 
+// One line per day, Monday first, for showing a restaurant's stored hours to other people.
+export function formatOpeningHours(hours: OpeningHours): { day: string; text: string }[] {
+  return DAY_KEYS.map((key) => {
+    const interval = hours[key];
+    return { day: DAY_LABELS[key], text: interval ? `${interval.open} to ${interval.close}` : "Closed" };
+  });
+}
+
 export const emptyHours = (): Record<DayKey, DayFormValue> =>
   Object.fromEntries(DAY_KEYS.map((day) => [day, { closed: true, open: "", close: "" }])) as Record<
     DayKey,

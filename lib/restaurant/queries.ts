@@ -2,6 +2,7 @@ import "server-only";
 import { cache } from "react";
 import { getCurrentUser } from "@/lib/auth/session";
 import { createClient } from "@/lib/supabase/server";
+import { isUuid } from "@/lib/pantry/validation";
 import { DAY_KEYS, emptyHours, type OpeningHours, type RestaurantValues } from "./hours";
 
 export function hoursToForm(stored: OpeningHours): RestaurantValues["hours"] {
@@ -32,3 +33,19 @@ export const getRestaurant = cache(async (): Promise<RestaurantValues | null> =>
     hours: hoursToForm(data.opening_hours as OpeningHours),
   };
 });
+
+export type ListingRestaurant = { businessName: string; address: string; hours: OpeningHours };
+
+// The restaurant behind a listing. Row level security returns it only when the viewer can see a listing of it.
+export async function getListingRestaurant(restaurantId: string): Promise<ListingRestaurant | null> {
+  if (!isUuid(restaurantId)) return null;
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("restaurants")
+    .select("business_name, address, opening_hours")
+    .eq("id", restaurantId)
+    .maybeSingle();
+  if (error) throw new Error("Could not load restaurant");
+  if (!data) return null;
+  return { businessName: data.business_name, address: data.address, hours: data.opening_hours as OpeningHours };
+}

@@ -25,6 +25,8 @@ export type Listing = {
   availableUntil: string;
   status: ListingStatus;
   createdAt: string;
+  restaurantId: string | null;
+  restaurantName: string | null;
 };
 
 // What the posting form holds: every field as the user typed it.

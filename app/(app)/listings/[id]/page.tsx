@@ -3,9 +3,11 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ChevronLeft, Clock, MapPin } from "lucide-react";
+import { ChevronLeft, Clock, MapPin, Store } from "lucide-react";
 import { getCurrentUser } from "@/lib/auth/session";
 import { getPendingClaimOnListing, getViewerClaim } from "@/lib/claims/queries";
+import { formatOpeningHours } from "@/lib/restaurant/hours";
+import { getListingRestaurant } from "@/lib/restaurant/queries";
 import { getListing, getPickupDetails, photoUrl } from "@/lib/listings/queries";
 import { LISTING_STATUS_LABELS } from "@/lib/listings/types";
 import { formatDateTime } from "@/lib/notifications/format";
@@ -24,6 +26,7 @@ async function ListingDetail({ params }: { params: Promise<{ id: string }> }) {
   const isPoster = user?.id === listing.posterId;
   const claim = user && !isPoster ? await getViewerClaim(listing.id) : null;
   const claimPending = claim?.status === "pending";
+  const restaurant = listing.restaurantId ? await getListingRestaurant(listing.restaurantId) : null;
   const posterClaim = isPoster && listing.status === "claimed" ? await getPendingClaimOnListing(listing.id) : null;
   // Row level security only returns these to the poster or to the active claimer.
   const details = isPoster || claimPending ? await getPickupDetails(listing.id) : null;
@@ -73,6 +76,26 @@ async function ListingDetail({ params }: { params: Promise<{ id: string }> }) {
             Available until {formatDateTime(listing.availableUntil)} (UAE time)
           </li>
         </ul>
+
+        {restaurant && (
+          <section aria-labelledby="restaurant-title" className="rounded-2xl border bg-card p-4">
+            <h2 id="restaurant-title" className="flex items-center gap-2 font-bold">
+              <Store className="size-4" aria-hidden="true" />
+              Restaurant
+            </h2>
+            <p className="mt-1 font-semibold">{restaurant.businessName}</p>
+            <p className="text-sm text-muted-foreground">{restaurant.address}</p>
+            <h3 className="mt-3 text-sm font-bold">Opening hours</h3>
+            <dl className="mt-1 grid grid-cols-[auto_1fr] gap-x-4 gap-y-0.5 text-sm">
+              {formatOpeningHours(restaurant.hours).map(({ day, text }) => (
+                <div key={day} className="contents">
+                  <dt className="text-muted-foreground">{day}</dt>
+                  <dd>{text}</dd>
+                </div>
+              ))}
+            </dl>
+          </section>
+        )}
 
         {(isPoster || claimPending) && (
           <section aria-labelledby="pickup-details-title" className="rounded-2xl border bg-card p-4">

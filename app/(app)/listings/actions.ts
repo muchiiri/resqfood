@@ -20,6 +20,7 @@ export type WithdrawState = { error?: string };
 
 const BUCKET = "listing-photos";
 const GENERIC_ERROR = "Something went wrong. Please try again.";
+const RESTAURANT_PROFILE_ERROR = "Add your restaurant details on your profile before sharing food.";
 
 const text = (formData: FormData, key: string) => {
   const value = formData.get(key);
@@ -83,7 +84,8 @@ export async function createListing(_prev: ListingState, formData: FormData): Pr
 
   if (error || typeof id !== "string") {
     if (photoPath) await supabase.storage.from(BUCKET).remove([photoPath]);
-    return { values, error: GENERIC_ERROR };
+    const needsProfile = error?.message?.includes("restaurant_profile_required");
+    return { values, error: needsProfile ? RESTAURANT_PROFILE_ERROR : GENERIC_ERROR };
   }
 
   revalidatePath("/listings");

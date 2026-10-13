@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Search } from "lucide-react";
+import { Search, Store } from "lucide-react";
 import { ListingCard } from "@/app/components/listing-card";
 import { getProfile } from "@/lib/auth/session";
 import { feedHref, PAGE_SIZE, parseFeedParams, type FeedParams, type FeedSort } from "@/lib/feed/params";
@@ -38,6 +38,7 @@ function Controls({ params }: { params: FeedParams }) {
         </label>
         {params.category && <input type="hidden" name="cat" value={params.category} />}
         {params.sort !== "ending" && <input type="hidden" name="sort" value={params.sort} />}
+        {params.restaurantsOnly && <input type="hidden" name="type" value="restaurants" />}
         <button
           type="submit"
           className="h-12 rounded-full bg-primary px-5 font-bold text-primary-foreground outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
@@ -53,6 +54,14 @@ function Controls({ params }: { params: FeedParams }) {
           className={`${chipClass} ${params.category === null ? "border-primary bg-primary text-primary-foreground" : "bg-card"}`}
         >
           All
+        </Link>
+        <Link
+          href={feedHref(params, { restaurantsOnly: !params.restaurantsOnly })}
+          aria-current={params.restaurantsOnly ? "true" : undefined}
+          className={`${chipClass} gap-1.5 ${params.restaurantsOnly ? "border-primary bg-primary text-primary-foreground" : "bg-card"}`}
+        >
+          <Store className="size-4" aria-hidden="true" />
+          Restaurants
         </Link>
         {CATEGORIES.map((category) => (
           <Link
@@ -92,7 +101,7 @@ async function Feed({ searchParams }: { searchParams: SearchParams }) {
   const words = locationWords(profile?.location ?? "");
   const ranked = rankNearFirst(listings, (listing) => isNearYou(listing.pickupArea, words));
   const visible = ranked.slice(0, params.page * PAGE_SIZE);
-  const filtered = Boolean(params.q || params.category);
+  const filtered = Boolean(params.q || params.category || params.restaurantsOnly);
 
   return (
     <div className="flex flex-col gap-6">
