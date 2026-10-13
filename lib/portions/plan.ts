@@ -14,8 +14,8 @@ export const MIN_PEOPLE = 1;
 export const MAX_PEOPLE = 50;
 
 // Cooked grams per person for one main meal at normal hunger. General rules of thumb, not nutrition advice.
-const BASE_GRAMS = { protein: 120, carbs: 180, vegetables: 150 } as const;
-const HUNGER_MULTIPLIER: Record<HungerLevel, number> = { light: 0.75, normal: 1, very_hungry: 1.3 };
+export const BASE_GRAMS = { protein: 120, carbs: 180, vegetables: 150 } as const;
+export const HUNGER_MULTIPLIER: Record<HungerLevel, number> = { light: 0.75, normal: 1, very_hungry: 1.3 };
 
 export type ComponentKey = keyof typeof BASE_GRAMS;
 export const COMPONENT_LABELS: Record<ComponentKey, string> = {

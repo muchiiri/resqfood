@@ -1,13 +1,22 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
+import Link from "next/link";
 import { getProfile } from "@/lib/auth/session";
 import { formatDateTime } from "@/lib/notifications/format";
 import { MAX_PEOPLE, MIN_PEOPLE } from "@/lib/portions/plan";
 import { listRecentPlans } from "@/lib/portions/queries";
+import { GroupForm } from "./group-form";
 import { PlanForm } from "./plan-form";
 import { SavedPlans } from "./saved-plans";
 
 export const metadata: Metadata = { title: "Plan portions | ResQfood" };
+
+type SearchParams = Promise<Record<string, string | string[] | undefined>>;
+
+const TABS = [
+  { id: "plan", label: "Plan portions", href: "/plan" },
+  { id: "group", label: "Group planner", href: "/plan?tab=group" },
+] as const;
 
 // Start from the household size and food preferences on the profile when they are set.
 async function Planner() {
@@ -33,20 +42,57 @@ async function Recent() {
   );
 }
 
-export default function PlanPage() {
+async function PlanContent({ searchParams }: { searchParams: SearchParams }) {
+  const raw = (await searchParams).tab;
+  const tab = (Array.isArray(raw) ? raw[0] : raw) === "group" ? "group" : "plan";
+
   return (
-    <main className="flex flex-col gap-10">
+    <>
+      <nav aria-label="Planner" className="flex gap-6 border-b">
+        {TABS.map(({ id, label, href }) => (
+          <Link
+            key={id}
+            href={href}
+            aria-current={tab === id ? "page" : undefined}
+            className={`-mb-px inline-flex min-h-11 items-center border-b-2 px-1 text-sm font-semibold outline-none focus-visible:rounded-sm focus-visible:ring-3 focus-visible:ring-ring/50 ${
+              tab === id
+                ? "border-primary text-primary"
+                : "border-transparent text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            {label}
+          </Link>
+        ))}
+      </nav>
+
+      {tab === "group" ? (
+        <GroupForm />
+      ) : (
+        <>
+          <Suspense fallback={<div className="h-64 max-w-4xl animate-pulse rounded-2xl bg-muted" aria-hidden="true" />}>
+            <Planner />
+          </Suspense>
+          <Suspense fallback={<div className="h-24 max-w-4xl animate-pulse rounded-2xl bg-muted" aria-hidden="true" />}>
+            <Recent />
+          </Suspense>
+        </>
+      )}
+    </>
+  );
+}
+
+export default function PlanPage({ searchParams }: { searchParams: SearchParams }) {
+  return (
+    <main className="flex flex-col gap-8">
       <div>
         <h1 className="text-3xl font-extrabold tracking-tight">Plan portions</h1>
         <p className="mt-1 max-w-2xl text-sm text-muted-foreground">
-          How much to cook or order for one meal. These amounts are general rules of thumb, not nutrition advice.
+          How much to cook or order for one meal, for yourself or for a group so it does not over-order. These amounts
+          are general rules of thumb, not nutrition advice.
         </p>
       </div>
       <Suspense fallback={<div className="h-64 max-w-4xl animate-pulse rounded-2xl bg-muted" aria-hidden="true" />}>
-        <Planner />
-      </Suspense>
-      <Suspense fallback={<div className="h-24 max-w-4xl animate-pulse rounded-2xl bg-muted" aria-hidden="true" />}>
-        <Recent />
+        <PlanContent searchParams={searchParams} />
       </Suspense>
     </main>
   );
