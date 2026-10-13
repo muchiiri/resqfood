@@ -5,7 +5,7 @@ import { Carrot, ScanLine, Share2, Utensils, type LucideIcon } from "lucide-reac
 import { Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle } from "@/components/ui/drawer";
 
 const ACTIONS: { label: string; icon: LucideIcon; tint: string; href?: string }[] = [
-  { label: "Share food", icon: Share2, tint: "bg-today-tint text-orange" },
+  { label: "Share food", icon: Share2, tint: "bg-today-tint text-orange", href: "/listings/new" },
   { label: "Add item", icon: Carrot, tint: "bg-fresh-tint text-fresh", href: "/my-food/new" },
   { label: "Scan receipt", icon: ScanLine, tint: "bg-expiring-tint text-expiring", href: "/my-food/new#scan" },
   { label: "Plan portions", icon: Utensils, tint: "bg-primary-tint text-primary" },

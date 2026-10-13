@@ -76,10 +76,18 @@ export default function MyFoodPage() {
     <main>
       <div className="mb-6 flex max-w-2xl items-center justify-between gap-4">
         <h1 className="text-3xl font-extrabold tracking-tight">My Food</h1>
-        <Link href="/my-food/new" className={addLinkClass}>
-          <Plus className="size-5" aria-hidden="true" />
-          Add item
-        </Link>
+        <div className="flex items-center gap-3">
+          <Link
+            href="/listings"
+            className="rounded-lg text-sm font-semibold text-primary outline-none hover:underline focus-visible:ring-3 focus-visible:ring-ring/50"
+          >
+            My listings
+          </Link>
+          <Link href="/my-food/new" className={addLinkClass}>
+            <Plus className="size-5" aria-hidden="true" />
+            Add item
+          </Link>
+        </div>
       </div>
       <Suspense fallback={<ListSkeleton />}>
         <FoodList />
